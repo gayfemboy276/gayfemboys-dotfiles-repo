@@ -5,15 +5,6 @@
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FOLDER_NAME="$(basename "$DOTFILES_DIR")"
 
-# Check if folder name is "dotfiles"
-if [ "$FOLDER_NAME" != "dotfiles" ]; then
-    echo "ey bro, rename the folder to dotfiles so this works (very important)
-    echo "current folder name: '$FOLDER_NAME'"
-    exit 1
-fi
-
-echo "folder name verified (VERY IMPORTANT)"
-
 # make sure its runnin wit sudo
 if [ "$EUID" -ne 0 ]; then
     echo "yo bro run this wit sudo so pacman works"
@@ -39,16 +30,16 @@ mkdir -p ~/.config/cava
 echo "done, copying dotfiles to their corresponding folders"
 
 # hyprland
-cp -rf ~/dotfiles/hyprland/* ~/.config/hyprland/
+cp -rf ~$DOTFILES_DIR/hyprland/* ~/.config/hyprland/
 
 # wofi
-cp -rf ~/dotfiles/wofi/* ~/.config/wofi/
+cp -rf ~$DOTFILES_DIR/wofi/* ~/.config/wofi/
 
 # Cava
-cp -rf ~/dotfiles/cava/* ~/.config/cava/
+cp -rf ~DOTFILES_DIR/cava/* ~/.config/cava/
 
 # Bashrc
-cp -f ~/dotfiles/shell/.bashrc ~/.bashrc
+cp -f ~/DOTFILES_DIR/.bashrc ~/.bashrc
 
 # optional: set permissions (just in case)
 chmod -R 644 ~/.config/hyprland/*
