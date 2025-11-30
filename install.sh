@@ -53,13 +53,6 @@ if [ -f "$DOTFILES_DIR/.bashrc" ]; then
     echo ".bashrc copied"
 fi
 
-# optional: set permissions
-chmod -R 644 ~/.config/hyprland/*
-chmod -R 644 ~/.config/wofi/*
-chmod -R 644 ~/.config/kitty/*
-chmod -R 644 ~/.config/cava/*
-chmod 644 ~/.bashrc
-
 # done
 echo ""
 echo "setup complete! all your configs are in place"
