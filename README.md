@@ -1,7 +1,7 @@
 # gayfemboy276's dotfiles
 
-sum simple dotfiles i made, theyre all pretty simple
-*why* did i make this?
+sum simple dotfiles i made, theyre all pretty simple  
+*why* did i make this?  
  cuz im a distro hopper and i dont wanna remake my shit everytime i switch distros
 
  ## credits
