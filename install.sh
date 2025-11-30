@@ -1,52 +1,67 @@
 #!/bin/bash
 
-# detect the folder where this installer is at
+# hey! this script will set up your dotfiles for hyprland, wofi, cava, and bashrc.
+# make sure you run it in the folder where all your configs are (no subfolders).
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-FOLDER_NAME="$(basename "$DOTFILES_DIR")"
+echo "running installer from: $DOTFILES_DIR"
 
-# make sure its runnin wit sudo
+# make sure we're running with sudo for pacman
 if [ "$EUID" -ne 0 ]; then
-    echo "yo bro run this wit sudo so pacman works"
-    echo "here run ts: sudo ./install.sh"
+    echo "yo, gotta run this with sudo for pacman to work"
+    echo "try: sudo ./install.sh"
     exit 1
 fi
 
+set -e  # stop if anything goes wrong
 
-set -e  # exit on other error
+# install the needed packages
+echo "installing packages: hyprland, hyprpaper, wofi, cava..."
+pacman -S --needed --noconfirm hyprland hyprpaper wofi cava
 
-#  install the needed packages
-echo "installing all needed packages"
-sudo pacman -S hyprland hyprpaper cava wofi
-
-
-# create config folders if they dont exist
-echo "Creating config directories..."
+# create config folders if they don’t exist
+echo "creating config folders..."
 mkdir -p ~/.config/hyprland
 mkdir -p ~/.config/wofi
 mkdir -p ~/.config/cava
+mkdir -p ~/.config/kitty   # just in case for permissions
 
-# --- 3. Copy or symlink dotfiles ---
-echo "done, copying dotfiles to their corresponding folders"
+# copy configs from this folder to the proper places
+echo "copying dotfiles..."
 
 # hyprland
-cp -rf ~$DOTFILES_DIR/hyprland/* ~/.config/hyprland/
+if [ -f "$DOTFILES_DIR/hyprland.conf" ]; then
+    cp -f "$DOTFILES_DIR/hyprland.conf" ~/.config/hyprland/
+    echo "hyprland.conf copied"
+fi
 
 # wofi
-cp -rf ~$DOTFILES_DIR/wofi/* ~/.config/wofi/
+if [ -f "$DOTFILES_DIR/wofi.conf" ]; then
+    cp -f "$DOTFILES_DIR/wofi.conf" ~/.config/wofi/
+    echo "wofi.conf copied"
+fi
 
-# Cava
-cp -rf ~DOTFILES_DIR/cava/* ~/.config/cava/
+# cava
+if [ -f "$DOTFILES_DIR/cava" ]; then
+    cp -f "$DOTFILES_DIR/cava" ~/.config/cava/
+    echo "cava config copied"
+fi
 
-# Bashrc
-cp -f ~/DOTFILES_DIR/.bashrc ~/.bashrc
+# bashrc
+if [ -f "$DOTFILES_DIR/.bashrc" ]; then
+    cp -f "$DOTFILES_DIR/.bashrc" ~/.bashrc
+    echo ".bashrc copied"
+fi
 
-# optional: set permissions (just in case)
+# optional: set permissions
 chmod -R 644 ~/.config/hyprland/*
 chmod -R 644 ~/.config/wofi/*
 chmod -R 644 ~/.config/kitty/*
 chmod -R 644 ~/.config/cava/*
 chmod 644 ~/.bashrc
 
-echo "setup complete, make sure to set an image for hyprpaper in $HOME/.config/hypr/hyprpaper.conf"
-echo "so hyprpaper doesnt be a bitch"
+# done
+echo ""
+echo "setup complete! all your configs are in place"
+echo "don't forget to set an image for hyprpaper in $HOME/.config/hypr/hyprpaper.conf"
+echo "so your wallpaper actually shows up"
